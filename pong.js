@@ -153,7 +153,8 @@ Ball.prototype.update = function(paddle1, paddle2) {
 	}
 	
 	// If a paddle is hit. . . 
-	if ( top_x < canvas.width ) {
+	// check player1's side first
+	if ( top_x < canvas.width / 2 ) {
 		
 		var playerHitX = paddle1.x + paddle1.width;
 		if ( ( playerHitX > top_x && playerHitX < bottom_x ) &&
@@ -165,12 +166,32 @@ Ball.prototype.update = function(paddle1, paddle2) {
 
 			//console.log("player hit");
 			
-			console.log(this.x_speed);
 			
 		}
+	// check player2's side for collision
+	} else {
 		
+		if ( ( paddle2.x > top_x && paddle2.x < bottom_x ) && 
+		   ( top_y > paddle2.y && bottom_y < paddle2.y + paddle2.height ) ) {
+			
+			// console.log("player2 hit");
+			this.x_speed = -ballRadius; // i did this for funsies
+			this.y_speed += (paddle2.y_speed / 2);
+			this.x += this.x_speed;
+			
+		}
 	}
+	
 };
+
+// Add some control. because we've lost control. 
+var keysDown = {};
+
+window.addEventListener("keydown", function(event) {
+	
+	keysDown[event.keyCode] = true;
+	
+});
 
 
 
