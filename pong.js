@@ -18,6 +18,7 @@ var context = canvas.getContext('2d');
 
 var paddleWidth = 20;
 var paddleHeight = 100;
+var paddleMoveSpeed = 5;
 
 var ballRadius = 10;
 
@@ -119,6 +120,8 @@ var render = function() {
 // Adding Animation
 
 var update = function() {
+	player.update();
+	computer.update();
 	ball.update(player.paddle, computer.paddle);
 };
 
@@ -188,10 +191,64 @@ Ball.prototype.update = function(paddle1, paddle2) {
 var keysDown = {};
 
 window.addEventListener("keydown", function(event) {
-	
 	keysDown[event.keyCode] = true;
-	
 });
+
+window.addEventListener("keyup", function(event) {
+	delete keysDown[event.keyCode];
+});
+
+Player.prototype.update = function() {
+	for (var key in keysDown) {
+		var value = Number(key);
+		// player 1 up key is q
+		if ( value == 81 ) {
+			this.paddle.move(0, -paddleMoveSpeed );
+	    // player 1 down key is a
+		} else if ( value == 65 ) {
+			this.paddle.move(0, paddleMoveSpeed);
+		} else {
+			this.paddle.move(0,0);
+		}
+	}
+};
+
+Paddle.prototype.move = function(x, y) {
+	this.x += x;
+	this.y += y;
+	this.x_speed = x;
+	this.y_speed = y;
+	// make sure the paddle can't go outside the canvas
+	
+};
+
+
+Computer.prototype.update = function() {
+	for (var key in keysDown) {
+		var value = Number(key);
+		// player 1 up key is q
+		if ( value == 38 ) {
+			this.paddle.move(0, -paddleMoveSpeed );
+	    // player 1 down key is a
+		} else if ( value == 40 ) {
+			this.paddle.move(0, paddleMoveSpeed);
+		} else {
+			this.paddle.move(0,0);
+		}
+	}
+};
+
+Computer.prototype.move = function(x, y) {
+	this.x += x;
+	this.y += y;
+	this.x_speed = x;
+	this.y_speed = y;
+	// make sure the paddle can't go outside the canvas
+	
+};
+
+
+
 
 
 
